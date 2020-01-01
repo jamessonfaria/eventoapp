@@ -42,7 +42,7 @@ public class EventoController {
 	
 	@GetMapping("/eventos")
 	public ModelAndView listaEventos() {
-		ModelAndView mv = new ModelAndView("index");
+		ModelAndView mv = new ModelAndView("evento/listaEventos");
 		List<Evento> eventos = es.findAll();
 		mv.addObject("eventos", eventos);
 		Integer qtdEvento = es.findCountEvents();

@@ -14,9 +14,9 @@
 		<header>
 		  <nav>
 		    <div class="nav-wrapper">
-		      <a href="#" class="brand-logo">Lista de Eventos - Quantidade: <span th:text="${qtdEventos}"></span></a>
+		      <a href="#" class="brand-logo">Lista de Eventos<span th:text="${qtdEventos}"></span></a>
 		      <ul id="nav-mobile" class="right hide-on-med-and-down">
-		        <li><a href="/cadastrarEvento" class="waves-effect waves-light btn"><i class="material-icons left">add_circle_outline</i>Cadastrar Evento</a></li>
+		        <li><a href="/login" class="waves-effect waves-light btn">Login</a></li>
 		        
 		      </ul>
 		    </div>
@@ -24,30 +24,8 @@
 		</header>
 		
 		
-		<table class="container">
-			<thead>
-				<tr>
-					<th>Nome</th>
-					<th>Local</th>
-					<th>Data</th>
-					<th>Horario</th>
-					<th></th>
-					
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="evento : ${eventos}">
-					<td><a th:href="${(#mvc.url('EC#detalhesEvento').arg(0, evento.id)).build()}"><span th:text="${evento.nome}"></span></a></td>
-					<td><span th:text="${evento.local}"></span></td>
-					<td><span th:text="${evento.data}"></span></td>
-					<td><span th:text="${evento.horario}"></span></td>
-					<td><a class="waves-effect waves-light" th:href="${(#mvc.url('EC#deletarEvento').arg(0, evento.id)).build()}"><i class="small material-icons left">delete</i></a></td>
-				</tr>
-			
-			</tbody>
-			
-		
-		</table>
+		<h1>Sistema para Cadastro de Eventos</h1>
+		<h3>Faça seu Login e cadastre seus eventos ....</h3>
 			
 		
 		<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
