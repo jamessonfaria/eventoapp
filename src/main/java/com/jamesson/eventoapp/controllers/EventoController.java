@@ -1,5 +1,7 @@
 package com.jamesson.eventoapp.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +15,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jamesson.eventoapp.models.Convidado;
 import com.jamesson.eventoapp.models.Evento;
-import com.jamesson.eventoapp.repository.ConvidadoRepository;
-import com.jamesson.eventoapp.repository.EventoRepository;
+import com.jamesson.eventoapp.services.EventoService;
 
 @Controller
 public class EventoController {
 
 	@Autowired
-	private EventoRepository er;
-	
-	@Autowired
-	private ConvidadoRepository cr;
+	private EventoService es;
 	
 	@GetMapping("/cadastrarEvento")
 	public String form() {
@@ -37,7 +35,7 @@ public class EventoController {
 			return "redirect:/cadastrarEvento";
 		}
 		
-		er.save(evento);
+		es.save(evento);
 		attributes.addFlashAttribute("mensagem", "Evento cadastrado com sucesso.");
 		return "redirect:/cadastrarEvento";
 	}
@@ -45,17 +43,20 @@ public class EventoController {
 	@GetMapping("/eventos")
 	public ModelAndView listaEventos() {
 		ModelAndView mv = new ModelAndView("index");
-		Iterable<Evento> eventos = er.findAll();
+		List<Evento> eventos = es.findAll();
 		mv.addObject("eventos", eventos);
+		Integer qtdEvento = es.findCountEvents();
+		mv.addObject("qtdEventos", qtdEvento);
+		
 		return mv;
 	}
 	
 	@GetMapping("/evento/{id}")
 	public ModelAndView detalhesEvento(@PathVariable long id) {
-		Evento evento = er.findById(id).orElse(new Evento());
+		Evento evento = es.findById(id);
 		ModelAndView mv = new ModelAndView("evento/detalhesEvento");
 		
-		Iterable<Convidado> convidados = cr.findByEvento(evento);
+		List<Convidado> convidados = es.findByEvento(evento);
 		
 		mv.addObject("evento", evento);
 		mv.addObject("convidados", convidados);
@@ -69,26 +70,25 @@ public class EventoController {
 			return "redirect:/evento/{id}";
 		}
 		
-		Evento evento = er.findById(id).orElse(new Evento());
+		Evento evento = es.findById(id);
 		convidado.setEvento(evento);
-		cr.save(convidado);
+		es.saveConvidado(convidado);
 		attributes.addFlashAttribute("mensagem", "Convidado adicionado com sucesso.");
 		return "redirect:/evento/{id}";
 	}
 	
 	@GetMapping("/deletarEvento")
 	public String deletarEvento(long id) {
-		Evento evento = er.findById(id).orElse(null);
-		if(evento != null)
-			er.delete(evento);
+		Evento evento = es.findById(id);
+		es.delete(evento);
 		
 		return "redirect:/eventos";
 	}
 	
 	@GetMapping("/deletarConvidado")
 	public String deletarConvidado(String rg) {
-		Convidado convidado = cr.findByRg(rg);
-		cr.delete(convidado);
+		Convidado convidado = es.findByRg(rg);
+		es.deleteConvidado(convidado);
 
 		Evento evento = convidado.getEvento();
 		long idEvento = evento.getId();

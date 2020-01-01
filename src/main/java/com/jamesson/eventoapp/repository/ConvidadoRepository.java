@@ -1,13 +1,15 @@
 package com.jamesson.eventoapp.repository;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.jamesson.eventoapp.models.Convidado;
 import com.jamesson.eventoapp.models.Evento;
 
-public interface ConvidadoRepository extends CrudRepository<Convidado, String> {
+public interface ConvidadoRepository extends JpaRepository<Convidado, String> {
 
-	Iterable<Convidado> findByEvento(Evento evento);
+	List<Convidado> findByEvento(Evento evento);
 	Convidado findByRg(String rg);
 	
 }
